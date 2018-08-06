@@ -24,7 +24,7 @@ public class EstoqueDao {
                + " " + est.getData_de_vencimento()    + "  " 
                + " );";   
        Conexao.executar(sql);
-   }
+   } 
      
      
      
