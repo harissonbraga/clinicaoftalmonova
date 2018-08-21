@@ -214,7 +214,11 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
             ObjEstoque est = new ObjEstoque();
             est.setNome(txtnome.getText());
             est.setCor(txtcor.getText());
+<<<<<<< HEAD
             est.setData_de_vencimento(txtdata_de_vencimento.getText());
+=======
+           
+>>>>>>> origin/master
 
             EstoqueDao.inserir(est);
 
