@@ -5,10 +5,14 @@
  */
 package telas;
 
+import dao.Conexao;
 import dao.EstoqueDao;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import obj.ObjEstoque;
+import sun.util.logging.PlatformLogger;
 
 /**
  *
@@ -22,7 +26,22 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
     public TelaEstoque() {
         initComponents();
     }
-
+    
+    
+    public  void carregarTabela(){
+        DefaultTableModel modelo = new DefaultTableModel();
+        String[] colunas = { "nome" , "cor", "codigo", "data_de_vencimento" };
+        //identificadores das colunas:
+        modelo.setColumnIdentifiers(colunas);
+        List<ObjEstoque> lista = EstoqueDao.getEstoques();
+        
+        for(ObjEstoque cid : lista){
+            Object[] obj = { cid.getNome(), cid.getCor(), cid.getCodigo(), cid.getData_de_vencimento() };
+            modelo.addRow(obj);
+            
+        }
+        tbtabelaID.setModel(modelo);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,7 +66,7 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
         btnApagar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtdata_de_vencimento = new javax.swing.JFormattedTextField();
+        txtdata_de_vencimento = new javax.swing.JTextField();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -63,7 +82,7 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Nome", "Cor", "Código", "Data de Vencimento"
+
             }
         ));
         jScrollPane1.setViewportView(tbtabelaID);
@@ -90,7 +109,11 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
             }
         });
 
-        txtcodigo.setText("codigo sera gerado automaticamente");
+        txtcodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcodigoActionPerformed(evt);
+            }
+        });
 
         btnApagar.setText("Apagar");
         btnApagar.addActionListener(new java.awt.event.ActionListener() {
@@ -104,12 +127,6 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Data de Vencimento:");
 
-        try {
-            txtdata_de_vencimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -119,7 +136,7 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,8 +161,8 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtdata_de_vencimento)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtdata_de_vencimento, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 133, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -170,7 +187,7 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtdata_de_vencimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(jLabel6)
@@ -188,9 +205,7 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
 
         String nome = txtnome.getText();
         String cor = txtcor.getText();
-        
-       
-         String data_de_vencimento = txtdata_de_vencimento.getText();
+        String data_de_vencimento = txtdata_de_vencimento.getText();
 
         //se o nome for vazio ou get codigo for 0(selecione..)
 //se o espaço não for vazio vai entrar no if e vai executar as linhas de baixo se for vazio cai no else e não deixa salvar no banco de dados.
@@ -199,7 +214,7 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
             ObjEstoque est = new ObjEstoque();
             est.setNome(txtnome.getText());
             est.setCor(txtcor.getText());
-           
+            est.setData_de_vencimento(txtdata_de_vencimento.getText());
 
             EstoqueDao.inserir(est);
 
@@ -218,9 +233,36 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
 
     private void btnApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagarActionPerformed
 
-        ((DefaultTableModel) tbtabelaID.getModel()).removeRow(tbtabelaID.getSelectedRow());
+        int linha = tbtabelaID.getSelectedRow();
+        if(linha == -1){
+            JOptionPane.showMessageDialog(this, "Você deve selecionar um item do estoque!");
+            
+        }else{
+            String nome = (String) tbtabelaID.getValueAt(linha, 1);
+            int resposta = JOptionPane.showConfirmDialog(this,
+                    "Confirma a exclusão do item? " + nome + " ?" ,
+                    " Excluir item" ,
+                    JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION){
+                
+            
+                    
+            ObjEstoque cid = new ObjEstoque();
+            int codigo = (int) tbtabelaID.getModel().getValueAt(linha, 0);
+            cid.setCodigo(codigo);
+            //excluir do banco:
+            EstoqueDao.excluir(cid);
+            //recarregar a tabela:
+            carregarTabela();
+        }
+            
+        }
 
     }//GEN-LAST:event_btnApagarActionPerformed
+
+    private void txtcodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcodigoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -238,7 +280,7 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
     private javax.swing.JTable tbtabelaID;
     private javax.swing.JTextField txtcodigo;
     private javax.swing.JTextField txtcor;
-    private javax.swing.JFormattedTextField txtdata_de_vencimento;
+    private javax.swing.JTextField txtdata_de_vencimento;
     private javax.swing.JTextField txtnome;
     // End of variables declaration//GEN-END:variables
 }
