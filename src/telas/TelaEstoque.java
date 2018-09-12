@@ -25,6 +25,8 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
      */
     public TelaEstoque() {
         initComponents();
+        
+        carregarTabela();
     }
     
     
@@ -34,9 +36,9 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
         //identificadores das colunas:
         modelo.setColumnIdentifiers(colunas);
         List<ObjEstoque> lista = EstoqueDao.getEstoques();
-        
-        for(ObjEstoque cid : lista){
-            Object[] obj = { cid.getNome(), cid.getCor(), cid.getCodigo(), cid.getData_de_vencimento() };
+                
+        for(ObjEstoque est : lista){
+            Object[] obj = { est.getNome(), est.getCor(), est.getCodigo(), est.getData_de_vencimento() };
             modelo.addRow(obj);
             
         }
@@ -214,11 +216,7 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
             ObjEstoque est = new ObjEstoque();
             est.setNome(txtnome.getText());
             est.setCor(txtcor.getText());
-<<<<<<< HEAD
             est.setData_de_vencimento(txtdata_de_vencimento.getText());
-=======
-           
->>>>>>> origin/master
 
             EstoqueDao.inserir(est);
 
@@ -252,14 +250,14 @@ public class TelaEstoque extends javax.swing.JInternalFrame {
             
                     
             ObjEstoque cid = new ObjEstoque();
-            int codigo = (int) tbtabelaID.getModel().getValueAt(linha, 0);
+            int codigo = (int) tbtabelaID.getModel().getValueAt(linha, 2);
             cid.setCodigo(codigo);
             //excluir do banco:
             EstoqueDao.excluir(cid);
             //recarregar a tabela:
             carregarTabela();
         }
-            
+             
         }
 
     }//GEN-LAST:event_btnApagarActionPerformed

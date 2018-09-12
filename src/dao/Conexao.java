@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  * @author 181710062
  */
 public class Conexao { 
-    private static final String URL = "jdbc:mysql://localhost:3306/estoque?zeroDateTimeBehavior=convertToNull";
+    private static final String URL = "jdbc:mysql://localhost:3306/banco_oftalmo?zeroDateTimeBehavior=convertToNull";
     private static final String USER = "root";
     private static final String PASSWORD = "";
     private static final String DRIVER = "com.mysql.jdbc.Driver";
