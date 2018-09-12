@@ -16,12 +16,11 @@ public class EstoqueDao {
      */
     public static void inserir (ObjEstoque est){
        String sql = "INSERT INTO estoque "
-               + " ( nome, cor, codigo, data_de_vencimento ) "
+               + " ( nome, cor, data_de_vencimento ) "
                + "VALUES( "
                + " '" + est.getNome()                 + "' , " 
-               + " " + est.getCor()                   + " , " 
-               + " " + est.getCodigo()                + " , " 
-               + " " + est.getData_de_vencimento()    + "  " 
+               + " '" + est.getCor()                  + "' , " 
+               + " '" + est.getData_de_vencimento()    + "' " 
                + " );";   
        Conexao.executar(sql);
    } 
@@ -40,7 +39,7 @@ public class EstoqueDao {
        Conexao.executar(sql);
    }      
        public static void excluir (ObjEstoque est){
-       String sql = "DELETE FROM estoque"
+       String sql = "DELETE FROM estoque "
                + "WHERE codigo = " + est.getCodigo();   
        Conexao.executar(sql);
 }
@@ -49,7 +48,7 @@ public class EstoqueDao {
        public static List<ObjEstoque> getEstoques(){
     List<ObjEstoque> lista = new ArrayList<>();
    
-    String sql = "SELECT nome, cor, codigo, data_de_vencimento FROM TABLE estoque";
+    String sql = "SELECT nome, cor, codigo, data_de_vencimento FROM estoque";
   
            
 
@@ -61,9 +60,9 @@ public class EstoqueDao {
                
                ObjEstoque est = new ObjEstoque();
                est.setNome(rs.getString(1));
-               est.setCor(rs.getString(3));
-               est.setCodigo(rs.getInt(5));
-               est.setData_de_vencimento(rs.getString(6));
+               est.setCor(rs.getString(2));
+               est.setCodigo(rs.getInt(3));
+               est.setData_de_vencimento(rs.getString(4));
                
                
                
